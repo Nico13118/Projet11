@@ -30,6 +30,7 @@ def showSummary():
     info_email = request.form['email']
     club = [club for club in clubs if club['email'] == info_email]
     if club:
+        club = club[0]
         return render_template('welcome.html', club=club, competitions=competitions)
     else:
         flash("Adresse email invalide !!")
