@@ -33,7 +33,7 @@ def search_club_with_email_adress(info_email):
         return club, error_message
     else:
         club = []
-        error_message = "Adresse email invalide !!"
+        error_message = "Invalid email address !!"
     return club, error_message
 
 
@@ -44,7 +44,7 @@ def showSummary():
     if club:
         return render_template('welcome.html', club=club, competitions=competitions)
     else:
-        flash("Adresse email invalide !!")
+        flash(error_message)
         return render_template("index.html")
 
 
