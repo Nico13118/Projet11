@@ -25,12 +25,23 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/showSummary',methods=['POST'])
-def showSummary():
-    info_email = request.form['email']
+def search_club_with_email_adress(info_email):
     club = [club for club in clubs if club['email'] == info_email]
     if club:
         club = club[0]
+        error_message = ""
+        return club, error_message
+    else:
+        club = []
+        error_message = "Adresse email invalide !!"
+    return club, error_message
+
+
+@app.route('/showSummary',methods=['POST'])
+def showSummary():
+    info_email = request.form['email']
+    club, error_message = search_club_with_email_adress(info_email)
+    if club:
         return render_template('welcome.html', club=club, competitions=competitions)
     else:
         flash("Adresse email invalide !!")
