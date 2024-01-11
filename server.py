@@ -37,7 +37,7 @@ def search_club_with_email_adress(info_email):
     return club, error_message
 
 
-@app.route('/showSummary',methods=['POST'])
+@app.route('/showSummary', methods=['POST'])
 def showSummary():
     info_email = request.form['email']
     club, error_message = search_club_with_email_adress(info_email)
@@ -48,14 +48,20 @@ def showSummary():
         return render_template("index.html")
 
 
+def control_the_number_of_points_for_a_club(found_club):
+    number_of_points = found_club['points']
+    return int(number_of_points) >= 1
+
+
 @app.route('/book/<competition>/<club>')
-def book(competition,club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
-    if foundClub and foundCompetition:
-        return render_template('booking.html',club=foundClub,competition=foundCompetition)
+def book(competition, club):
+    found_club = [c for c in clubs if c['name'] == club][0]
+    number_of_points = control_the_number_of_points_for_a_club(found_club)
+    found_competition = [c for c in competitions if c['name'] == competition][0]
+    if number_of_points:
+        return render_template('booking.html', club=found_club, competition=found_competition)
     else:
-        flash("Something went wrong-please try again")
+        flash("You do not have enough points to register.")
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
